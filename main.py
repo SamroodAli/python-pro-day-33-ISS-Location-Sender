@@ -1,11 +1,13 @@
 import requests
 import datetime as dt
-
-
+import smtplib
+import time
 # My latitude and longitude
 MY_LAT = 10.915731
 MY_LONG = 76.018570
-
+# Email address and Password
+MY_EMAIL = "Your email address here"
+PASSWORD = "Your email address password here"
 
 # Function to check if International Space Station is near me
 def is_iss_overhead():
@@ -46,3 +48,17 @@ def is_sky_dark():
     # return if either after sunset or before sunrise when it is dark
     return time_now >= sunset_hour or time_now <= sunrise_hour
 
+
+# Running script every 60 seconds
+while True:
+    time.sleep(60)
+    if is_iss_overhead() and is_sky_dark():
+        with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls()
+            connection.login(user=MY_EMAIL, password=PASSWORD)
+            connection.sendmail(
+                from_addr=MY_EMAIL,
+                to_addrs= MY_EMAIL,
+                msg="Subject:Look Up👆\n\nThe ISS (International Space Station) is above you in the sky. "
+                    "This is an automated email from python pro Udemy course day 33 ISS Location Sender"
+            )
