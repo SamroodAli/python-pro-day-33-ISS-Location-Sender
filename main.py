@@ -1,6 +1,14 @@
 import requests
-import json
 import datetime as dt
+
+# International Space Station Location
+ISS_URL ="http://api.open-notify.org/iss-now.json"
+response = requests.get(url=ISS_URL)
+response.raise_for_status()
+# ISS API Data
+data = response.json()
+iss_latitude =float(data["iss_position"]["latitude"])
+iss_longitude = float(data["iss_position"]["longitude"])
 
 # My latitude and longitude
 MY_LAT = 10.915731
@@ -12,17 +20,17 @@ API_PARAMETERS = {
     "formatted": 0
 }
 # Sunrise sunset api endpoint
-URL = f"https://api.sunrise-sunset.org/json"
+SUNSET_URL = f"https://api.sunrise-sunset.org/json"
 # Requesting api
-response = requests.get(url=URL, params=API_PARAMETERS)
+response = requests.get(url=SUNSET_URL, params=API_PARAMETERS)
 # Response status code handler inbuilt in requests library
 response.raise_for_status()
 # API DATA
 data = response.json()
 sunrise = data["results"]["sunrise"]
-sunrise_hour = sunrise.split("T")[1].split(":")[0]
 sunset = data["results"]["sunset"]
-sunset_hour = sunset.split("T")[1].split(":")[0]
+# Filtering to get sunrise and sunset hours
+sunrise_hour = int(sunrise.split("T")[1].split(":")[0])
+sunset_hour = int(sunset.split("T")[1].split(":")[0])
 now = dt.datetime.now()
-
 
